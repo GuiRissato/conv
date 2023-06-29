@@ -3,6 +3,9 @@ import { Route, Routes, BrowserRouter as Router } from 'react-router-dom';
 
 // PAGES
 import Main from "../pages/chat"
+import Login from "../pages/login"
+
+import Header from "../Pattern/Header";
 
 // import Private from './Private';
 
@@ -11,7 +14,8 @@ function PageRoutes(){
   return(
     <Router basename='/'>
      <Routes>
-     <Route path="*" element={<Main/>}/>
+     <Route path="*" element={<Login/>}/>
+     <Route path="chat" element={<Main/>}/>
      {/*<Route path="/" element={<MainLayout><EnterHash/></MainLayout>}/>
 
         <Route element ={<Private/>}>

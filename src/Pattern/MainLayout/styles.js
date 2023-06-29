@@ -95,7 +95,9 @@ export const Spa = styled.div`
     position:relative;
     justify-content: center;
     padding:1rem;
-    min-height:calc(100vh - 9rem);
+    min-height:calc((100vh - 35px));
+    // background-color:#F1F6F9;
+    margin-top:40px;
     `}
 
 `

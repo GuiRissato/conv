@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from "react";
 import { Status, Thought } from "./styles.js";
 
-export default function ProfileIcon({ stt, src, name, thought }){
+export default function ProfileIcon({ stt, src, name, thought, header = false }){
 
   const [status, setStatus] = useState(stt);
 
@@ -13,7 +13,7 @@ export default function ProfileIcon({ stt, src, name, thought }){
     </Status>
 
 
-    <Thought name={name}>
+    <Thought name={name} header={header}>
       {name?name:thought??"..."}
     </Thought>
   </div>

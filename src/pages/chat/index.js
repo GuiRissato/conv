@@ -12,6 +12,7 @@ import {
 } from "../../Pattern";
 
 import api from "../../interface/API";
+import PUSHER from "../../interface/Pusher";
 
 
 export default function Main(){
@@ -19,9 +20,9 @@ export default function Main(){
   const [conversations, setConversations] = useState([
     { cod:1, name:"be", status:"online", thought:"the eras tour", messages:[{ message:"oii", fromMe:false }], newMessages:1 },
     { cod:2, name:"thi", status:"online", thought:"ill be the archer", messages:[{ message:"lucass", fromMe:false }, { message:"ta aí?", fromMe:false }], newMessages:2 },
-    { cod:3, name:"kass", status:"online", thought:"can i go where you goo", messages:[{ message:"dia!!", fromMe:true }], newMessages:0 },
-    { cod:4, name:"gui", status:"online", thought:"se tiver que ser será", messages:[{ message:"até depois entao", fromMe:true }], newMessages:0 },
-    { cod:5, name:"andreia", status:"online", thought:"se tiver que ser será", messages:[], newMessages:0 }
+    // { cod:3, name:"kass", status:"online", thought:"can i go where you goo", messages:[{ message:"dia!!", fromMe:true }], newMessages:0 },
+    // { cod:4, name:"gui", status:"online", thought:"se tiver que ser será", messages:[{ message:"até depois entao", fromMe:true }], newMessages:0 },
+    // { cod:5, name:"andreia", status:"online", thought:"se tiver que ser será", messages:[], newMessages:0 }
   ]);
   const [currentConv, setCurrentConv] = useState({id:0, ...conversations[0]});
 
@@ -34,6 +35,8 @@ export default function Main(){
 
     currentConvAux.messages.unshift({ message:paramMessage, fromMe:true })
     conversationsAux[currentConvAux.id] = currentConvAux;
+    let today = new Date()
+    PUSHER.post({ id:1, username:"kass", message:paramMessage, fromMe:false, time: today.getHours() + ":" + today.getMinutes() });
 
     setConversations(conversationsAux)
     setCurrentConv(currentConvAux);
@@ -55,18 +58,16 @@ export default function Main(){
 
       <Chat messages={currentConv.messages} message={message} setMessage={setMessage} sendMessage={sendMessage} user={currentConv}/>
 
-      <Line style={{ backgroundColor: "#F7F7F7", height:"25vh", width:"80%", marginTop:"5vh", borderRadius:21, padding: 10, overflowX:"auto", alignItems:"center" }}>
+      <div style={{ display:"flex", overflow:"auto", whiteSpace:"nowrap", flexDirection:"row", width:"80%", backgroundColor:"#F1F6F9", padding:7, borderRadius:18 }}>
         {conversations.map((conv, id)=>(
-          <Pack key={id}>
             <MiniConv
             isTheCurrent={id === currentConv.id}
             userData={{ id,...conv }}
             sendMessage={sendMessageFromMiniConv}
             selectConv={()=> setCurrentConv({ id ,...conv }) }
             />
-          </Pack>
         ))}
-      </Line>
+      </div>
 
     </Container>
   )

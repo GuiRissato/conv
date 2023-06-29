@@ -1,4 +1,4 @@
-import { Container, Line, Pack, Input, RoundButton, MessageIndicator, Message } from './styles';
+import { Container, Line, Pack, Input, RoundButton, MessageIndicator, Message, SearchUser } from './styles';
 import ProfileIcon from "./ProfileIcon";
 import GreatProfileIcon from "./GreatProfileIcon";
 import Chat from "./Chat";
@@ -15,5 +15,6 @@ export {
   Message,
   MessageIndicator,
   Chat,
-  MiniConv
+  MiniConv,
+  SearchUser
   };

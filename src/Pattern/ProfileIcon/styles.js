@@ -6,7 +6,7 @@ export const Status = styled.div`
   aspect-ratio : 1 / 1;
   height:30px;
 
-  background-color: #ffffff50;
+  background-color: #ffffff;
   border-width: 5px;
   border: solid;
   border-radius: 50%;
@@ -24,7 +24,6 @@ export const Status = styled.div`
 
 export const Thought = styled.div`
 
-  display: flex;
   padding:10px;
   border-radius: 21px;
   border: solid;
@@ -34,6 +33,10 @@ export const Thought = styled.div`
   font-size: 0.8rem;
   margin-left: 10px;
 
-  display:inline;
+  display: inline;
+
+  @media screen and (max-width:800px){
+    display: ${p=> p.header?"none":"inline"};
+  }
 
 `

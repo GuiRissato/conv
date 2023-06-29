@@ -32,7 +32,7 @@ export const Line = styled.div`
   row-gap:1.5rem;
   column-gap:1rem;
 
-  margin: .5rem;
+  // margin: .5rem;
   overflow-wrap:normal;
   // justify-content: space-evenly;
   align-content: center;
@@ -216,5 +216,32 @@ ${props => props.fromMe?
 
 font-weight:normal;
 font-size: 0.88rem;
+
+`
+export const SearchUser = styled.input`
+
+border-radius: 20px;
+background-color: #F1F6F9;
+border: solid;
+border-color: #F1F6F9;
+padding: 10px;
+outline: none;
+
+color: #212A3E;
+font-size: 0.8rem;
+
+// @media screen and (max-width:700px){
+//     height: 10px;
+//     width:10px;
+//     border-radius:50%;
+//
+//     :focus{
+//         z-index: 2;
+//         width: 100%;
+//         border-radius: 20px;
+//         box-shadow: 1px 1px 10px #f2f2f2;
+//     }
+//
+// }
 
 `

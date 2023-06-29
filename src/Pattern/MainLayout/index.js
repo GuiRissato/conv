@@ -3,14 +3,20 @@ import React, { useEffect, useState } from 'react';
 import { useLocation } from 'react-router-dom';
 
 // COMPONENTS
-import { Container, Header, Spa } from './styles.js';
+import { Spa } from './styles.js';
+import Header from "../Header";
 
 function MainLayout({ children }){
 
 
   return(
     <div style={{ width:'100%', height:'100%' }}>
-      <Spa>{children}</Spa>
+    <div style={{ display:"flex", justifyContent:"center", alignItems:"center", width:"100%", height:35 }}>
+      <Header/>
+    </div>
+      <Spa>
+        {children}
+      </Spa>
     </div>
   )
 
