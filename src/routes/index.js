@@ -7,21 +7,22 @@ import Login from "../pages/login"
 
 import Header from "../Pattern/Header";
 
-// import Private from './Private';
+import Private from './private.js';
 
 function PageRoutes(){
 
   return(
     <Router basename='/'>
      <Routes>
-     <Route path="*" element={<Login/>}/>
-     <Route path="chat" element={<Main/>}/>
-     {/*<Route path="/" element={<MainLayout><EnterHash/></MainLayout>}/>
+  
+     <Route path="/login" element={<Login/>}/>
 
         <Route element ={<Private/>}>
-            <Route path="/questions" element={<Questionnaire/>}/>
+          <Route path="chat" element={<Main/>}/>
         </Route>
-      */}
+
+      <Route path="*" element={<Login/>}/>  
+
      </Routes>
     </Router>
   )

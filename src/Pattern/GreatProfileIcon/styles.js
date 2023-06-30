@@ -1,10 +1,13 @@
 import styled from "styled-components";
 
 export const Status = styled.div`
-  display: inline-block;
+  display: flex;
 
   aspect-ratio : 1 / 1;
   height:8vh;
+
+  justify-content:center;
+  align-items:center;
 
   background-color: #ffffff50;
   border-width: 5px;
@@ -14,6 +17,7 @@ export const Status = styled.div`
   padding:2px;
 
   cursor: pointer;
+  font-size: 1.5rem;
 
   img{
     height:100%;

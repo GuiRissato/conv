@@ -6,13 +6,15 @@ export default function Chat({ message, setMessage, sendMessage, messages, user 
 
   return(
 
-    <Container style={{ justifyContent:"bottom", height:"60vh", width:"70vh", backgroundColor:"white", borderRadius:"21px", border:"solid", borderColor:"#F2F2F2", borderWidth:2 }}>
-
+    <Container style={{ justifyContent:"bottom", height:"100%", width:"70vh", backgroundColor:"white", borderRadius:"21px", border:"solid", borderColor:"#F2F2F2", borderWidth:2 }}>
+    
+    {user?
+    <>
     <Line style={{ padding:10, borderRadius:"21px 21px 0px 0px" }}>
 
     <Pack fill={5} style={{ justifyContent:"space-between" }}>
       <ProfileIcon thought={user.thought} stt={user.status} src={"https://assets.nintendo.com/image/upload/f_auto/q_auto/dpr_2.0/c_scale,w_400/ncom/pt_BR/games/switch/t/the-legend-of-zelda-breath-of-the-wild-switch/description-image"}/>
-      <RoundButton/>
+      {/* <RoundButton/> */}
       </Pack>
 
     </Line>
@@ -42,6 +44,12 @@ export default function Chat({ message, setMessage, sendMessage, messages, user 
         <RoundButton/>
       </Pack>
     </Line>
+    </>
+    :
+    <div style={{ display:"flex", width:"100%", height:"100%", alignItems:"center", justifyContent:"center", color:"#9AA4B5" }}>
+      Inicie uma conversa
+    </div>
+    }
 
     </Container>
   )

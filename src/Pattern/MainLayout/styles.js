@@ -1,94 +1,5 @@
 import styled, { css } from "styled-components";
 
-export const Container = styled.div`
-  display: flex;
-  flex-direction: row;
-  max-height: 3rem;
-  width: 100%;
-  align-items: center;
-  justify-content:space-between;
-  padding: 1rem;
-  position:fixed;
-  top:0;
-  backdrop-filter: blur(12px);
-  background-color: rgba(255,255,255,0.6);
-  -webkit-background-color: rgba(255,255,255,0.4);
-  -moz-background-color: rgba(255,255,255,0.6);
-  z-index:10;
-
-  @media screen and (max-width:414px){
-    // justify-content: center;
-  }
-
-
-`;
-
-export const Header = styled.div`
-
-  display: flex;
-  flex-direction: row;
-  width: 49%;
-  height: 3rem;
-
-  justify-content: flex-start;
-  align-items: center;
-  background-color: #003457;
-  border-radius: 3rem;
-  padding: 3px 3px 3px 7px;
-  color: white !important;
-  font-size: 1.3rem;
-  font-weight: 500;
-
-  @media screen and (max-width:750px) and (min-width:414px){
-    width:49%;
-    font-size:1rem;
-  }
-
-  @media screen and (max-width:414px){
-    ${(props)=>props.location === '/questions'?
-    css`
-    width:3rem;
-    height:3rem;
-
-    // img{
-    //   width:3.5rem;
-    //   height: 3rem;
-    // }
-
-    animation: shortLogo .7s 1s;
-    animation-fill-mode: both;
-
-    @keyframes shortLogo{
-      from {
-        z-index:10;
-        position:fixed;
-        width:90%;
-      }
-      to {
-        // width:3rem;
-        // position:relative;
-        font-size:0rem;
-        justify-content:center;
-        align-items:center;
-        img{
-          display:none;
-        }
-       }
-    }
-
-    `
-    :
-    css`
-    margin:0px;
-    width:90%;
-    justify-content: flex-start;
-    align-self:flex-start;
-    `
-    }
-  }
-
-`;
-
 export const Spa = styled.div`
   ${css`
     display:flex;
@@ -97,7 +8,7 @@ export const Spa = styled.div`
     padding:1rem;
     min-height:calc((100vh - 35px));
     // background-color:#F1F6F9;
-    margin-top:40px;
+    margin-top:2rem;
     `}
 
 `

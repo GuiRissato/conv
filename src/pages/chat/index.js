@@ -8,39 +8,56 @@ import {
   Input,
   Message,
   Chat,
-  MiniConv
+  MiniConv,
+  Grid
 } from "../../Pattern";
 
 import api from "../../interface/API";
 import PUSHER from "../../interface/Pusher";
 
+import Cookies from "js-cookie";
+
 
 export default function Main(){
 
   const [conversations, setConversations] = useState([
-    { cod:1, name:"be", status:"online", thought:"the eras tour", messages:[{ message:"oii", fromMe:false }], newMessages:1 },
-    { cod:2, name:"thi", status:"online", thought:"ill be the archer", messages:[{ message:"lucass", fromMe:false }, { message:"ta aí?", fromMe:false }], newMessages:2 },
-    // { cod:3, name:"kass", status:"online", thought:"can i go where you goo", messages:[{ message:"dia!!", fromMe:true }], newMessages:0 },
-    // { cod:4, name:"gui", status:"online", thought:"se tiver que ser será", messages:[{ message:"até depois entao", fromMe:true }], newMessages:0 },
-    // { cod:5, name:"andreia", status:"online", thought:"se tiver que ser será", messages:[], newMessages:0 }
+    // {
+    // cod:1,
+    // name:"be",
+    // status:"online",
+    // thought:"the eras tour",
+    // messages:[{ message:"oii", fromMe:false }],
+    // newMessages:1
+    // },
   ]);
-  const [currentConv, setCurrentConv] = useState({id:0, ...conversations[0]});
-
+  const [currentConv, setCurrentConv] = useState(null);
   const [message, setMessage] = useState("");
+
+  useEffect(()=>{
+
+  },[])
 
   function sendMessage(paramMessage = message){
 
-    let currentConvAux = {...currentConv};
-    let conversationsAux = conversations.map((a)=>({...a}));
+    if(currentConv){
 
-    currentConvAux.messages.unshift({ message:paramMessage, fromMe:true })
-    conversationsAux[currentConvAux.id] = currentConvAux;
-    let today = new Date()
-    PUSHER.post({ id:1, username:"kass", message:paramMessage, fromMe:false, time: today.getHours() + ":" + today.getMinutes() });
+      let currentConvAux = {...currentConv};
+      let conversationsAux = conversations.map((a)=>({...a}));
 
-    setConversations(conversationsAux)
-    setCurrentConv(currentConvAux);
-    setMessage("");
+      currentConvAux.messages.unshift({ message:paramMessage, fromMe:true })
+      conversationsAux[currentConvAux.id] = currentConvAux;
+
+      setConversations(conversationsAux)
+      setCurrentConv(currentConvAux);
+      setMessage("");
+
+      let username = Cookies.get("conv-username");
+      let cod = Cookies.get("conv-id");
+
+      let today = new Date()
+      PUSHER.post({ cod, username, message:paramMessage, fromMe:false, time: today.getHours() + ":" + today.getMinutes() });
+    }
+
   }
 
   function sendMessageFromMiniConv(message, id){
@@ -54,21 +71,25 @@ export default function Main(){
 
   return(
 
-    <Container>
+    <Grid>
 
-      <Chat messages={currentConv.messages} message={message} setMessage={setMessage} sendMessage={sendMessage} user={currentConv}/>
+      <Chat messages={currentConv?.messages} message={message} setMessage={setMessage} sendMessage={sendMessage} user={currentConv??null}/>
 
-      <div style={{ display:"flex", overflow:"auto", whiteSpace:"nowrap", flexDirection:"row", width:"80%", backgroundColor:"#F1F6F9", padding:7, borderRadius:18 }}>
-        {conversations.map((conv, id)=>(
+      <div style={{ display:"flex", overflow:"auto", whiteSpace:"nowrap", flexDirection:"row", width:"80%", height:"100%", backgroundColor:"#F1F6F9", padding:7, borderRadius:18, justifyContent:"center", alignItems:"center" }}>
+        {conversations.length > 0?
+        conversations.map((conv, id)=>(
             <MiniConv
-            isTheCurrent={id === currentConv.id}
+            isTheCurrent={id === currentConv?.id}
             userData={{ id,...conv }}
             sendMessage={sendMessageFromMiniConv}
             selectConv={()=> setCurrentConv({ id ,...conv }) }
             />
-        ))}
+        ))
+        :
+        <p style={{ color:"#526D82" }}>Adicione novos contatos</p>
+        }
       </div>
 
-    </Container>
+    </Grid>
   )
 }

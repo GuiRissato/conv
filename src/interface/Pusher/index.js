@@ -9,7 +9,7 @@ const PUSHER = {
 
 async function start(data){
 
- const { id, name, username } = data;
+ const { cod, name, username } = data;
   try{
 
     var pusher = new Pusher('0fb0d6b89d9dcdaeb894', {
@@ -29,7 +29,7 @@ async function start(data){
     })
 
     channel.bind("pusher:subscription_succeeded", ()=>{
-
+      console.log("adicionado!");
     })
 
     channel.bind("pusher:member_removed", (member) => {
@@ -37,7 +37,7 @@ async function start(data){
     });
 
     channel.bind("client-send-message", (data) => {
-      console.log(data);
+      handleMessage(data);
     });
 
     return "success";
@@ -49,14 +49,18 @@ async function start(data){
 }
 
 async function post(data){
-console.log(data)
+
 try{
   channel.trigger("client-send-message", data);
-  console.log("FOI")
+  console.log(channel)
 }catch(err){
   console.log("pusher error: ", err);
 }
 
+}
+
+function handleMessage(data){
+  console.log(data);
 }
 
 export default PUSHER;

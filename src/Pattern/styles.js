@@ -132,33 +132,33 @@ export const RoundButton = styled.button`
   align-items: center;
   z-index:10;
 
-  :hover{
-    animation: overButton .3s;
-    animation-fill-mode: both;
-    @keyframes overButton{
-      from { aspect-ratio : 1/1; }
-      to {
-        border-radius:20px;
-        aspect-ratio : 1/0.5;
-      }
-    }
-  }
+  // :hover{
+  //   animation: overButton .3s;
+  //   animation-fill-mode: both;
+  //   @keyframes overButton{
+  //     from { aspect-ratio : 1/1; }
+  //     to {
+  //       border-radius:20px;
+  //       aspect-ratio : 1/0.5;
+  //     }
+  //   }
+  // }
 
-  :not(:hover){
+  // :not(:hover){
 
-    animation: returnNormalButton .3s;
-    animation-fill-mode: both;
-    @keyframes returnNormalButton{
-      from {
-        border-radius:20px;
-        aspect-ratio : 1/0.5;
-      }
-      to {
-        border-radius:50%;
-        aspect-ratio : 1/1;
-      }
-    }
-  }
+  //   animation: returnNormalButton .3s;
+  //   animation-fill-mode: both;
+  //   @keyframes returnNormalButton{
+  //     from {
+  //       border-radius:20px;
+  //       aspect-ratio : 1/0.5;
+  //     }
+  //     to {
+  //       border-radius:50%;
+  //       aspect-ratio : 1/1;
+  //     }
+  //   }
+  // }
 `
 
 export const MessageIndicator = styled.div`
@@ -218,17 +218,19 @@ font-weight:normal;
 font-size: 0.88rem;
 
 `
-export const SearchUser = styled.input`
+export const SearchUser = styled.button`
 
 border-radius: 20px;
-background-color: #F1F6F9;
+background-color: #609966;
 border: solid;
-border-color: #F1F6F9;
+border-color: #609966;
 padding: 10px;
 outline: none;
 
-color: #212A3E;
+color: white;
 font-size: 0.8rem;
+font-weight: 500;
+cursor:pointer;
 
 // @media screen and (max-width:700px){
 //     height: 10px;
@@ -243,5 +245,24 @@ font-size: 0.8rem;
 //     }
 //
 // }
+
+`
+
+export const Grid = styled.div`
+
+display:grid;
+
+height: 87vh;
+width: 100%;
+
+justify-content:center !important;
+align-items:center !important;
+
+grid-template-rows: 2fr 1fr;
+grid-template-columns: 1fr;
+grid-row-gap: 1rem;
+
+
+// background-color:black;
 
 `

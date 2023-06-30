@@ -9,9 +9,7 @@ import { ModalProvider } from "./Pattern/Modal";
 function App() {
   return (
   <ModalProvider>
-    <MainLayout>
       <PageRoutes/>
-    </MainLayout>
   </ModalProvider>
   );
 }
