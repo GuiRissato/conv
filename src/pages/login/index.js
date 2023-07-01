@@ -17,19 +17,19 @@ export default function Login(){
     const [newUser, setNewUser] = useState({});
 
 
-    useEffect(()=>{
+    // useEffect(()=>{
 
-        if(Cookies.get('conv-id')){
-        const cod = parseInt(Cookies.get('conv-id'));
-        const name = Cookies.get('conv-name');
-        const username = Cookies.get('conv-username');
+    //     if(Cookies.get('conv-id')){
+    //     const cod = parseInt(Cookies.get('conv-id'));
+    //     const name = Cookies.get('conv-name');
+    //     const username = Cookies.get('conv-username');
 
-        PUSHER.start({ cod, name, username })
+    //     PUSHER.start({ cod, name, username })
 
-        navigate("/chat");
-        }
+    //     navigate("/chat");
+    //     }
 
-    },[])
+    // },[])
 
 
     async function handleCredentials(){
@@ -64,7 +64,7 @@ export default function Login(){
         ){
 
         delete newUser.confirmPassword
-        console.log(newUser);    
+
          await api.post("/createUser", newUser)
          .then((res)=> console.log(res.data) )
          .catch((err)=> console.log(err))
@@ -76,13 +76,14 @@ export default function Login(){
         <div style={{ display:"flex", flexDirection:"column", justifyContent:"center", alignItems:"center", height: '97vh' }}>
 
            <form onSubmit={(e)=> e.preventDefault()}>
-            <Line style={{ margin:"0.5rem" }}>
+
+            <Line style={{ marginBottom:"0.5rem" }}>
                 <Pack pos={3} style={{ justifyContent:"center" }}>
                     <img src="/logo.png" alt="image" style={{ height: '5vh' }}/>
                 </Pack>
             </Line>
 
-            <Line style={{ margin:"0.5rem" }}>
+            <Line style={{ marginBottom:"0.5rem" }}>
                 <Pack pos={3} style={{ justifyContent:"center" }}>
                     <Input
                     onChange={(e)=> setUserData({...userData, username: e.target.value})}
@@ -91,7 +92,7 @@ export default function Login(){
                 </Pack>
             </Line>
 
-            <Line style={{ margin:"0.5rem" }}>
+            <Line style={{ marginBottom:"0.5rem" }}>
                 <Pack pos={3} style={{ justifyContent:"center" }}>
                     <Input
                     type="password"
@@ -101,7 +102,7 @@ export default function Login(){
                 </Pack>
             </Line>
 
-            <Line style={{ margin:"0.5rem" }}>
+            <Line style={{ marginBottom:"0.5rem" }}>
                 <Pack pos={3} style={{ justifyContent:"center" }}>
                     <RoundButton type="submit" onClick={()=> handleCredentials() }/>
                 </Pack>

@@ -16,26 +16,31 @@ import api from "../../interface/API";
 import PUSHER from "../../interface/Pusher";
 
 import Cookies from "js-cookie";
-
+import { useSelector, useDispatch } from "react-redux";
+import { setCurrentConvID } from "../../interface/Redux/Modules/mainData";
 
 export default function Main(){
 
-  const [conversations, setConversations] = useState([
-    // {
-    // cod:1,
-    // name:"be",
-    // status:"online",
-    // thought:"the eras tour",
-    // messages:[{ message:"oii", fromMe:false }],
-    // newMessages:1
-    // },
-  ]);
+  const { conversations: convFromRedux } = useSelector((state) => state.mainData);
+  const dispatch = useDispatch();
+
+  const [conversations, setConversations] = useState([]);
   const [currentConv, setCurrentConv] = useState(null);
   const [message, setMessage] = useState("");
 
   useEffect(()=>{
-
+    //Busca no banco as conversas
+    // Verifica quais usuários estão online
+    // Configura o Redux
+    // Configura a const conversations e currentConv (ex. { id:0, ...conversations[0] })
   },[])
+
+  useEffect(()=>{
+    //Resgatar conversas 
+    if(convFromRedux.lenght !== 0){
+      setConversations(convFromRedux);
+    }
+  },[convFromRedux])
 
   function sendMessage(paramMessage = message){
 
@@ -55,7 +60,13 @@ export default function Main(){
       let cod = Cookies.get("conv-id");
 
       let today = new Date()
-      PUSHER.post({ cod, username, message:paramMessage, fromMe:false, time: today.getHours() + ":" + today.getMinutes() });
+      PUSHER.post({ 
+        from:{ cod, username },
+        to: { cod:currentConv.cod, username: currentConv.username }, 
+        message:paramMessage, 
+        time: today.getHours() + ":" + today.getMinutes() 
+      });
+      //SALVAR NO BANCO
     }
 
   }
@@ -66,6 +77,13 @@ export default function Main(){
 
     conversationsAux[id].messages.unshift({ message, fromMe:true });
     setConversations(conversationsAux);
+  }
+
+  function handleCurrentConv(conv,id){ 
+
+    setCurrentConv({ id, ...conv });
+    dispatch(setCurrentConvID(conv.cod));
+
   }
 
 
@@ -82,7 +100,7 @@ export default function Main(){
             isTheCurrent={id === currentConv?.id}
             userData={{ id,...conv }}
             sendMessage={sendMessageFromMiniConv}
-            selectConv={()=> setCurrentConv({ id ,...conv }) }
+            selectConv={()=> handleCurrentConv(conv, id) }
             />
         ))
         :

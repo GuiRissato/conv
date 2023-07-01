@@ -41,7 +41,7 @@ export default function MiniConv({ userData, sendMessage, selectConv, isTheCurre
       </Line>
       </>
       :
-      <GreatProfileIcon status={status} name={name} thought={thought}/>
+      <GreatProfileIcon cod={cod} status={status} name={name} thought={thought}/>
       }
 
     </Container>
