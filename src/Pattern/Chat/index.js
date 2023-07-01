@@ -1,5 +1,6 @@
 import React, { useEffect, useState } from "react";
 import { Container, Line, Pack, ProfileIcon, RoundButton, Input, Message } from "../index.js";
+import { MessageLine, Messages } from "./styles.js";
 
 export default function Chat({ message, setMessage, sendMessage, messages, user }){
 
@@ -12,25 +13,28 @@ export default function Chat({ message, setMessage, sendMessage, messages, user 
     <>
     <Line style={{ padding:10, borderRadius:"21px 21px 0px 0px" }}>
 
-    <Pack fill={5} style={{ justifyContent:"space-between" }}>
-      <ProfileIcon thought={user.thought} stt={user.status} src={"https://assets.nintendo.com/image/upload/f_auto/q_auto/dpr_2.0/c_scale,w_400/ncom/pt_BR/games/switch/t/the-legend-of-zelda-breath-of-the-wild-switch/description-image"}/>
-      {/* <RoundButton/> */}
+      <Pack fill={5} style={{ justifyContent:"space-between" }}>
+        <ProfileIcon 
+        user={user}
+        src={""}
+        />
       </Pack>
 
     </Line>
 
-    <div style={{ display:"flex", flexDirection:"column-reverse", height:"100%",width:"100%", overflowY:"auto", padding:10 }}>
+    <Messages>
     {messages?.map((m,id)=>(
-      <div style={{ display:"flex", flexDirection: m.fromMe?"row-reverse":"row", padding:`0px ${m.fromMe?10:0}px 0px 10px`  }} key={id}>
-        <Message fromMe={m.fromMe} theLast={(id === 0)} >{m.message}</Message>
-      </div>
+      <MessageLine fromMe={m.fromMe} key={id}>
+        <Message fromMe={m.fromMe} theLast={(id === 0)}>{m.message}</Message>
+      </MessageLine>
     ))
     }
-    </div>
+    </Messages>
 
 
     <Line style={{ padding:10, backgroundColor:"#ffffff80" }}>
       <Pack pos={1} fill={5}>
+
         <Input
         placeholder={" Digite..."}
         style={{ width:"100%" }}
@@ -40,8 +44,10 @@ export default function Chat({ message, setMessage, sendMessage, messages, user 
         }}
         onChange={(e)=> setMessage(e.target.value)}
         />
+
         <RoundButton/>
         <RoundButton/>
+
       </Pack>
     </Line>
     </>

@@ -1,5 +1,18 @@
 import styled from "styled-components";
 
+export const GreatProfileContainer = styled.div`
+
+display:flex;
+ flex-direction:column;
+ width:100%;
+ justify-content: center;
+ align-items: center;
+ background-color:#F1F6F9;
+ padding:10px;
+ border-radius:2rem;
+
+`
+
 export const Status = styled.div`
   display: flex;
 
@@ -41,4 +54,16 @@ export const Thought = styled.div`
 
   display:inline;
 
+`
+
+export const Initials = styled.div`
+
+display:flex;
+ height:100%;
+ aspect-ratio:1/1;
+ justify-content:center;
+ align-items:center;
+ background-color:${p=>p.color};
+ color:white;
+ border-radius:50%;
 `

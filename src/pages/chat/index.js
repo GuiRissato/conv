@@ -18,6 +18,7 @@ import PUSHER from "../../interface/Pusher";
 import Cookies from "js-cookie";
 import { useSelector, useDispatch } from "react-redux";
 import { setCurrentConvID } from "../../interface/Redux/Modules/mainData";
+import { ContactsList, ItemContainer } from "./styles";
 
 export default function Main(){
 
@@ -88,26 +89,35 @@ export default function Main(){
 
 
   return(
+      <Grid>
+      
+      <ItemContainer>
+        <Chat 
+         messages={currentConv?.messages} 
+         message={message} 
+         setMessage={setMessage} 
+         sendMessage={sendMessage} 
+         user={currentConv??null}
+         />
+        </ItemContainer>
 
-    <Grid>
+        <ItemContainer>
+          <ContactsList>
+            {conversations.length > 0?
+            conversations.map((conv, id)=>(
+                <MiniConv
+                isTheCurrent={id === currentConv?.id}
+                userData={{ id,...conv }}
+                sendMessage={sendMessageFromMiniConv}
+                selectConv={()=> handleCurrentConv(conv, id) }
+                />
+            ))
+            :
+            <p style={{ color:"#526D82" }}>Adicione novos contatos</p>
+            }
+          </ContactsList>
+        </ItemContainer>
 
-      <Chat messages={currentConv?.messages} message={message} setMessage={setMessage} sendMessage={sendMessage} user={currentConv??null}/>
-
-      <div style={{ display:"flex", overflow:"auto", whiteSpace:"nowrap", flexDirection:"row", width:"80%", height:"100%", backgroundColor:"#F1F6F9", padding:7, borderRadius:18, justifyContent:"center", alignItems:"center" }}>
-        {conversations.length > 0?
-        conversations.map((conv, id)=>(
-            <MiniConv
-            isTheCurrent={id === currentConv?.id}
-            userData={{ id,...conv }}
-            sendMessage={sendMessageFromMiniConv}
-            selectConv={()=> handleCurrentConv(conv, id) }
-            />
-        ))
-        :
-        <p style={{ color:"#526D82" }}>Adicione novos contatos</p>
-        }
-      </div>
-
-    </Grid>
+      </Grid>
   )
 }

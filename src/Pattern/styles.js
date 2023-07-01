@@ -24,9 +24,11 @@ export const Container = styled.div`
 
 export const Line = styled.div`
 
+display: grid;
+
   width:100%;
   height:auto;
-  display: grid;
+
   grid-template-columns: repeat(5, auto);
   grid-auto-row: 1fr;
   row-gap:1.5rem;
@@ -42,19 +44,19 @@ export const Line = styled.div`
 
   align-items:center;
 
-  @media screen and (max-width:800px){
-    grid-template-columns: 1fr;
-    grid-template-rows: auto;
+  // @media screen and (max-width:800px){
+  //   grid-template-columns: 1fr;
+  //   grid-template-rows: auto;
 
-    :nth-child(<=1){
-      Pack{
-        grid-column 1 / span 4;
-      }
-    }
+  //   :nth-child(<=1){
+  //     Pack{
+  //       grid-column 1 / span 4;
+  //     }
+  //   }
 
-    :nth-child(>3){
-      justify-content: space-evenly;
-    }
+  //   :nth-child(>3){
+  //     justify-content: space-evenly;
+  //   }
 
   }
 
@@ -119,18 +121,22 @@ export const Input = styled.input`
 `
 
 export const RoundButton = styled.button`
-  background-color: #9BA4B5;
-  border-radius: 50%;
-  height: 25px;
+  background-color:${p=>p.color??"#9BA4B5"};
+  border-radius: 2rem;
+  width:100%;
+  // height: 25px;
+  min-height:30px;
   border:solid;
   border-width:1px;
-  border-color:#9BA4B5;
-  aspect-ratio : 1/1;
+  border-color:${p=>p.color??"#9BA4B5"};
+  // aspect-ratio : 1/1;
   margin-left: 10px;
 
   justify-content: center;
   align-items: center;
   z-index:10;
+
+  cursor:pointer;
 
   // :hover{
   //   animation: overButton .3s;
@@ -255,14 +261,11 @@ display:grid;
 height: 87vh;
 width: 100%;
 
-justify-content:center !important;
-align-items:center !important;
+justify-content:center;
 
 grid-template-rows: 2fr 1fr;
 grid-template-columns: 1fr;
 grid-row-gap: 1rem;
 
-
-// background-color:black;
 
 `

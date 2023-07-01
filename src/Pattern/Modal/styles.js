@@ -79,14 +79,12 @@ ${css`
   display: flex;
   position:relative;
   flex-direction:column;
-  align-items:center;
+  justify-content:center;
   height:auto;
   width:auto;
   font-family: Helvetica;
   background-color:white;
   border-radius:2rem;
-
-  padding:12px;
 
   overflow-y: auto;
   ::-webkit-scrollbar {

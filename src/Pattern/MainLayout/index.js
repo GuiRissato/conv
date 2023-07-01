@@ -10,10 +10,12 @@ function MainLayout({ children }){
 
 
   return(
-    <div style={{ width:'100%', height:'100%' }}>
-    <div style={{ display:"flex", justifyContent:"center", alignItems:"center", width:"100%", height:35 }}>
+    <div style={{ display:'flex', flexDirection:'column', width:"100%" }}>
+
+    <div style={{ display:"flex", justifyContent:"center", alignItems:"center", width:"100%", height:"1.7rem" }}>
       <Header/>
     </div>
+
       <Spa>
         {children}
       </Spa>

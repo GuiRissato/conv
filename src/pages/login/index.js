@@ -8,10 +8,14 @@ import api from "../../interface/API";
 import PUSHER from "../../interface/Pusher";
 
 import Cookies from "js-cookie";
+import { useDispatch } from "react-redux";
+import { setUser } from "../../interface/Redux/Modules/mainData";
 
 export default function Login(){
 
     const navigate = useNavigate();
+    const dispatch = useDispatch();
+
     const { addModal, closeModal } = useModal();
     const [userData, setUserData] = useState({ username:"", password:"" });
     const [newUser, setNewUser] = useState({});
@@ -19,15 +23,22 @@ export default function Login(){
 
     // useEffect(()=>{
 
-    //     if(Cookies.get('conv-id')){
-    //     const cod = parseInt(Cookies.get('conv-id'));
-    //     const name = Cookies.get('conv-name');
-    //     const username = Cookies.get('conv-username');
+    //     (async ()=>{
+    //         const cod =Cookies.get('conv-id');
 
-    //     PUSHER.start({ cod, name, username })
+    //         if(cod){
+            
+    //         await api.get(`/userInfo/${parseInt(cod)}`)
+    //         .then((res)=>{
 
-    //     navigate("/chat");
+    //             dispatch(setUser(res.data));
+    //             PUSHER.start({ cod, name:res.data.name, username:res.data.user_name })
+
+    //             navigate("/chat");
+    //         })
+    //         }
     //     }
+    //     )()
 
     // },[])
 
@@ -38,7 +49,7 @@ export default function Login(){
 
         await api.post('/login', userData)
         .then(async (res)=>{
-            const { id, name } = res.data;
+            const { id, name, color, thought } = res.data;
             const { username, password } = userData;
 
            let initPusher = await PUSHER.start({ cod: id, name, username, password });
@@ -46,6 +57,16 @@ export default function Login(){
                 Cookies.set('conv-id', id, { expires: 7 });
                 Cookies.set('conv-name', name, { expires: 7 });
                 Cookies.set('conv-username', username, { expires: 7 });
+
+                let userData = {
+                    cod:id,
+                    name,
+                    username,
+                    color,
+                    thought
+                }
+
+                dispatch(setUser(userData));
                 navigate("chat");
             }
         })

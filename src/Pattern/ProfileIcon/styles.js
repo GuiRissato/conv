@@ -1,5 +1,14 @@
 import styled from "styled-components";
 
+export const ProfileIconContainer = styled.div`
+
+display:flex;
+flex-direction:row;
+justify-content:center;
+align-items:center;
+
+`
+
 export const Status = styled.div`
   display: inline-block;
 
@@ -11,9 +20,9 @@ export const Status = styled.div`
   border: solid;
   border-radius: 50%;
   border-color: ${props => props.color};
-  padding:2px;
+  padding:1px;
 
-  cursor: pointer;
+  cursor: default;
 
   img{
     height:100%;
@@ -39,4 +48,36 @@ export const Thought = styled.div`
     display: ${p=> p.header?"none":"inline"};
   }
 
+`
+
+export const Input = styled.input`
+
+  border-radius: 20px;
+  background-color: #F1F6F9;
+  border: solid;
+  border-color: #F1F6F9;
+  padding: 10px;
+  outline: none;
+
+  width:auto;
+
+  color: #212A3E;
+  font-size: 0.8rem;
+
+  @media screen and (max-width:800px){
+    display: hidden;
+  }
+
+  }
+`
+export const Initials = styled.div`
+
+display:flex;
+ height:100%;
+ aspect-ratio:1/1;
+ justify-content:center;
+ align-items:center;
+ background-color:${p=>p.color};
+ color:white;
+ border-radius:50%;
 `

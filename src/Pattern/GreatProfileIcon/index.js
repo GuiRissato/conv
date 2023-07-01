@@ -1,9 +1,6 @@
-import React, { useEffect, useState } from "react";
-import { Status, Thought } from "./styles.js";
+import { GreatProfileContainer, Initials, Status, Thought } from "./styles.js";
 
-export default function GreatProfileIcon({ stt, src, name, username, thought, cod }){
-
-  const [status, setStatus] = useState(stt);
+export default function GreatProfileIcon({ color = "#394867", stt, src, name, username, thought, cod }){
 
   function getInitials(){
 
@@ -12,15 +9,21 @@ export default function GreatProfileIcon({ stt, src, name, username, thought, co
 
     names.map((n)=> initials += n[0] );
 
-    return initials;
+    return initials.slice(0,2)??initials;
 
   }
 
   return(
-    <div style={{ display: "flex", flexDirection:"column", justifyContent: "center", alignItems: "center" }}>
+    <GreatProfileContainer>
 
-    <Status color={"#6ABC68"}>
-      {src?<img src={src}/>:getInitials()}
+    <Status color={stt === "online"?"#6ABC68":"grey"}>
+      {src?
+      <img src={src}/>
+      :
+      <Initials color={color}>
+        {getInitials()}
+      </Initials>
+      }
     </Status>
 
     <div style={{ marginTop:5 }}>{name}</div>
@@ -29,7 +32,8 @@ export default function GreatProfileIcon({ stt, src, name, username, thought, co
     <Thought>
       {thought}
     </Thought>
-  </div>
+
+    </GreatProfileContainer>
   )
 
 }

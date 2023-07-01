@@ -3,12 +3,12 @@ import styled, { css } from "styled-components";
 export const Spa = styled.div`
   ${css`
     display:flex;
-    position:relative;
-    justify-content: center;
+
     padding:1rem;
-    min-height:calc((100vh - 35px));
-    // background-color:#F1F6F9;
     margin-top:2rem;
+    max-height:100vh;
+
+    // background-color:#F1F6F9;
     `}
 
 `

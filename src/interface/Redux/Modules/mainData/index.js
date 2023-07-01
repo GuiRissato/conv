@@ -1,4 +1,12 @@
 //Ações utilizadas para altera variáveis do estado compartilhado (redux)
+
+export function setUser(data) {
+    return {
+        type: '@mainData/SET_USER',
+        payload: data,
+    };
+}
+
 export function setConversations(data) {
     return {
         type: '@mainData/SET_CONVERSATION',

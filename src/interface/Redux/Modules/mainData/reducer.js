@@ -1,4 +1,5 @@
 const initialState = {
+    user:{},
     conversations:[],
     currentConvID:null
   };
@@ -6,6 +7,11 @@ const initialState = {
   export const mainData = (state = initialState, action) => {
   
     switch (action.type) {
+      case "@mainData/SET_USER":
+        return {
+          ...state,
+          user: action.payload,
+        };
       case "@mainData/SET_CONVERSATIONS":
         return {
           ...state,
