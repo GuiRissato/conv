@@ -15,13 +15,14 @@ const PUSHER = {
 async function start(data){
 
  const { cod, name, username } = data;
+
   try{
 
     if(!channel){
       var pusher = new Pusher('0fb0d6b89d9dcdaeb894', {
             cluster: 'sa1',
             channelAuthorization: {
-              endpoint: "http://192.168.0.19:3333/pusher/auth",
+              endpoint: "http://127.0.0.1:3333/pusher/auth",
               params: {
                 ...data
               },
@@ -74,7 +75,8 @@ function handleAddedMember(member){
   let aux = [...conversations];
 
   aux.map((conversation)=>{
-    if(parseInt(member.user_id) === parseInt(conversation.cod)){
+    if(parseInt(member.id) === parseInt(conversation.cod)){
+
       conversation.status = "online";
     }
   })
@@ -89,7 +91,7 @@ function handleRemovedMember(member){
   let aux = [...conversations];
 
   aux.map((conversation)=>{
-    if(parseInt(member.user_id) === parseInt(conversation.cod)){
+    if(parseInt(member.id) === parseInt(conversation.cod)){
       conversation.status = "offline";
     }
   })
@@ -124,6 +126,8 @@ function handleMessage(data){
 
 function verifyIsOnline(userId){
   let member = channel.members.get(userId);
+  console.log(channel)
+  console.log(channel.members.members)
   return member?"online":"offline";
 }
 

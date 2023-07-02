@@ -8,8 +8,9 @@ export function setUser(data) {
 }
 
 export function setConversations(data) {
+    console.log("Redux",data)
     return {
-        type: '@mainData/SET_CONVERSATION',
+        type: '@mainData/SET_CONVERSATIONS',
         payload: data,
     };
 }
@@ -17,6 +18,13 @@ export function setConversations(data) {
 export function setCurrentConvID(data) {
     return {
         type: '@mainData/SET_CURRENT_CONV_ID',
+        payload: data,
+    };
+}
+
+export function setNewUserAdded(data) {
+    return {
+        type: '@mainData/SET_NEW_USER_ADDED',
         payload: data,
     };
 }

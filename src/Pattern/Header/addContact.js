@@ -3,9 +3,12 @@ import { Input, RoundButton } from "../styles";
 import GreatProfileIcon from "../GreatProfileIcon";
 import api from "../../interface/API";
 import Cookies from "js-cookie";
+import { useDispatch } from "react-redux";
+import { setNewUserAdded } from "../../interface/Redux/Modules/mainData";
 
-export default function AddContact(){
+export default function AddContact({ closeModal }){
 
+    const dispatch = useDispatch();
     const [user, setUser] = useState(null);
 
     async function searchContact(input){
@@ -37,6 +40,10 @@ export default function AddContact(){
             "user_2": addUser,
         } 
         await api.post('/createGroup',addGroup)
+        .then(()=>{
+            dispatch(setNewUserAdded(true));
+            closeModal();
+        })
     }
 
     return(

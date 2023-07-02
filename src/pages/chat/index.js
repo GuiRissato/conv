@@ -17,19 +17,20 @@ import PUSHER from "../../interface/Pusher";
 
 import Cookies from "js-cookie";
 import { useSelector, useDispatch } from "react-redux";
-import { setCurrentConvID } from "../../interface/Redux/Modules/mainData";
+import { setConversations, setCurrentConvID } from "../../interface/Redux/Modules/mainData";
 import { ContactsList, ItemContainer } from "./styles";
 import { DefaultWarn } from "../../Pattern/styles";
-import AddContact from "../../Pattern/Header/addContact";
+
 import { useModal } from "../../Pattern/Modal";
 
 export default function Main(){
 
-  const { conversations: convFromRedux } = useSelector((state) => state.mainData);
+  const { conversations: convFromRedux, newContactAdded } = useSelector((state) => state.mainData);
+
   const dispatch = useDispatch();
   const { addModal } = useModal();
 
-  const [conversations, setConversations] = useState([]);
+  const [convs, setConvs] = useState([]);
   const [currentConv, setCurrentConv] = useState(null);
   const [message, setMessage] = useState("");
   
@@ -38,34 +39,39 @@ export default function Main(){
   useEffect(() => {
     //Busca no banco as conversas
     (async function getConversations() {
+
+      var conv = [];
+
       await api.get(`groups/${cod}`)
       .then(async (res)=>{
 
         const userInfo = res.data.group;
 
-        for(let user in userInfo){
+        for(let user of userInfo){
 
-          await api.get(`/conversations/${user.group_id}`).then((res)=>{
+
+          await api.get(`/conversations/${user.group_id}`)
+          .then((res)=>{
 
             let messageUserAux = res.data
-            let conv = []
+            
             let auxConv = {
                'cod':null,
                'username':null,
+               'name': null,
                'color':null,
                'status':null,
                'thought':null,
-               'messages':[{'message':null,'fromMe':null}],
-               'newMessage':null       
+               'messages':[], // {'message':string,'fromMe':bool}
+               'newMessage':null
              }
 
-              for(let item in userInfo){
-
-               auxConv.cod = item.id
-               auxConv.username = item.user_name
-               auxConv.color = item.color
-               auxConv.status = PUSHER.verifyIsOnline(item.id)
-               auxConv.thought = item.thought
+               auxConv.cod = user.id
+               auxConv.name = user.name
+               auxConv.username = user.user_name
+               auxConv.color = user.color
+               auxConv.status = PUSHER.verifyIsOnline(user.id)
+               auxConv.thought = user.thought
 
                let messages = []
                let newMessage
@@ -89,24 +95,29 @@ export default function Main(){
                })
                auxConv.messages = messages
                auxConv.newMessage = newMessage
-               conv.push(auxConv)
-              }
-             
-             console.log(conv)
+               conv.push(auxConv);
            })
         }
       })
+
+    console.log(conv);
+    dispatch(setConversations(conv));
+    setConvs(conv);
+
     })();
-    // Verifica quais usuários estão online
     // Configura o Redux
     // Configura a const conversations e currentConv (ex. { id:0, ...conversations[0] })
-  },[])
+  },[newContactAdded])
 
   useEffect(()=>{
     //Resgatar conversas 
     if(convFromRedux.lenght !== 0){
-      setConversations(convFromRedux);
+      setConvs(convFromRedux);
     }
+  },[convFromRedux])
+
+  useEffect(()=>{
+    console.log(convFromRedux)
   },[convFromRedux])
 
   function sendMessage(paramMessage = message){
@@ -114,12 +125,12 @@ export default function Main(){
     if(currentConv){
 
       let currentConvAux = {...currentConv};
-      let conversationsAux = conversations.map((a)=>({...a}));
+      let conversationsAux = convs.map((a)=>({...a}));
 
       currentConvAux.messages.unshift({ message:paramMessage, fromMe:true })
       conversationsAux[currentConvAux.id] = currentConvAux;
 
-      setConversations(conversationsAux)
+      setConvs(conversationsAux)
       setCurrentConv(currentConvAux);
       setMessage("");
 
@@ -134,16 +145,17 @@ export default function Main(){
         time: today.getHours() + ":" + today.getMinutes() 
       });
       //SALVAR NO BANCO
+
     }
 
   }
 
   function sendMessageFromMiniConv(message, id){
 
-    let conversationsAux = conversations.map((a)=>({...a}));
+    let conversationsAux = convs.map((a)=>({...a}));
 
     conversationsAux[id].messages.unshift({ message, fromMe:true });
-    setConversations(conversationsAux);
+    setConvs(conversationsAux);
   }
 
   function handleCurrentConv(conv,id){ 
@@ -169,9 +181,10 @@ export default function Main(){
 
         <ItemContainer>
           <ContactsList>
-            {conversations.length > 0?
-            conversations.map((conv, id)=>(
+            {convs.length > 0?
+            convs.map((conv, id)=>(
                 <MiniConv
+                key={id}
                 isTheCurrent={id === currentConv?.id}
                 userData={{ id,...conv }}
                 sendMessage={sendMessageFromMiniConv}

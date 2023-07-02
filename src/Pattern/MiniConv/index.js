@@ -14,7 +14,7 @@ export default function MiniConv({ userData, sendMessage, selectConv, isTheCurre
         <>
       <Line onClick={()=> selectConv()}>
         <Pack fill={5} style={{ justifyContent:"space-between" }}>
-        <ProfileIcon name={name}/>
+        <ProfileIcon user={userData} miniConv={true}/>
         {newMessages > 0?<MessageIndicator>{newMessages}</MessageIndicator>:<></>}
         </Pack>
       </Line>

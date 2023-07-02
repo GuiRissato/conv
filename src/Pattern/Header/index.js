@@ -8,7 +8,7 @@ import { HeaderContainer, LeftHeader } from "./styles.js";
 
 export default function Header(){
 
-  const { addModal } = useModal();
+  const { addModal, closeModal } = useModal();
   const { user, conversations } = useSelector(state=> state.mainData);
 
   return(
@@ -29,7 +29,7 @@ export default function Header(){
       <SearchUser 
       animation={conversations.length === 0} 
       onClick={()=> addModal({ 
-        body: <AddContact/>, 
+        body: <AddContact closeModal={closeModal}/>, 
         buttonPrimary: { label: "Fechar" } 
         })}
       >

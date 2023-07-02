@@ -1,7 +1,8 @@
 const initialState = {
     user:{},
     conversations:[],
-    currentConvID:null
+    currentConvID:null,
+    newContactAdded:false,
   };
   
   export const mainData = (state = initialState, action) => {
@@ -15,7 +16,7 @@ const initialState = {
       case "@mainData/SET_CONVERSATIONS":
         return {
           ...state,
-          conversation: action.payload,
+          conversations: action.payload,
         };
   
       case "@mainData/SET_CURRENT_CONV_ID":
@@ -23,6 +24,12 @@ const initialState = {
           ...state,
           currentConvID: action.payload,
         };
+
+      case "@mainData/SET_NEW_USER_ADDED":
+      return {
+        ...state,
+        newContactAdded: !state.newContactAdded,
+      };
 
       case "@mainData/RESET_STATE":
         return initialState;

@@ -2,7 +2,7 @@ import { Initials, ProfileIconContainer, Status, Thought } from "./styles.js";
 import { Input } from "../styles.js";
 import api from "../../interface/API/index.js";
 
-export default function ProfileIcon({ user, src, header = false }){
+export default function ProfileIcon({ user, src, miniConv = false, header = false }){
 
   const { cod, color, name, username, thought, status:stt } = user;
 
@@ -35,11 +35,17 @@ export default function ProfileIcon({ user, src, header = false }){
     </Status>
 
     <div style={{ display:"flex", flexDirection:"column", marginLeft:10, marginRight:10 }}>
+      {!miniConv?
+      <>
       <div style={{ fontSize:"0.7rem" }}>{name}</div>
       <div>{username}#{cod}</div>
+      </>
+      :
+      <div>{username}</div>
+      }
     </div>
-
-    {!header?
+    {!miniConv?
+    !header?
       <Thought name={false} header={header}>
         {thought??"..."}
       </Thought>
@@ -51,7 +57,9 @@ export default function ProfileIcon({ user, src, header = false }){
       placeholder={" novo status..."} 
       onBlur={(e)=> saveThought(e.target.value)}
       />
-    }
+    :
+    <></>
+  }
 
   </ProfileIconContainer>
   )
