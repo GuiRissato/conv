@@ -25,13 +25,27 @@ export default function AddContact(){
         }
     }
 
+    const handleClickAdd =  async () =>{
+        // pegar o usuario logado
+        let cod = Cookies.get("conv-id");
+        // pegar o usuario para adicionar
+        const addUser = user.cod
+        // adicionar o grupo no banco de dados
+
+        const addGroup = {
+            "user_1": parseInt(cod),
+            "user_2": addUser,
+        } 
+        await api.post('/createGroup',addGroup)
+    }
+
     return(
         <div style={{ display:"flex", height:"100%", flexDirection:"column", alignItems:"center", justifyContent:"space-between", padding:20 }}>
 
             {user?
             <div style={{ display:"flex", flexDirection:"column", width:"100%", height:"100%", justifyContent:"center", alignItems:"center", marginBottom:30 }}>
                 <GreatProfileIcon color={user.color} cod={user.cod} name={user.name} username={user.username} thought={user.thought} />
-                {user.cod != Cookies.get("conv-id")?<RoundButton style={{ color:"white", marginTop:15 }} color={"#609966"}>+ Adicionar</RoundButton>:<></>}
+                {user.cod != Cookies.get("conv-id")?<RoundButton style={{ color:"white", marginTop:15 }} color={"#609966"} onClick={handleClickAdd}>+ Adicionar</RoundButton>:<></>}
             </div>
             :
             <></>}

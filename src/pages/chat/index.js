@@ -28,9 +28,64 @@ export default function Main(){
   const [conversations, setConversations] = useState([]);
   const [currentConv, setCurrentConv] = useState(null);
   const [message, setMessage] = useState("");
+  
+  let cod = Cookies.get("conv-id");
 
-  useEffect(()=>{
+  useEffect(() => {
     //Busca no banco as conversas
+    (async function getConversations() {
+      await api.get(`groups/${cod}`)
+      .then(async (res)=>{
+        const userInfo = res.data.group
+        // for(user in userInfo){
+
+        // }
+        res.data.group.map(async (item)=>{
+          await api.get(`/conversations/${item.group_id}`).then((res)=>{
+           let messageUserAux = res.data
+           let conv = []
+           let auxConv = {
+              'cod':null,
+              'username':null,
+              'color':null,
+              'status':null,
+              'thought':null,
+              'messages':[{'message':null,'fromMe':null}],
+              'newMessage':null       
+            }
+            userInfo.map((item)=>{
+              console.log(item)
+              auxConv.cod = item.id
+              auxConv.username = item.user_name
+              auxConv.color = item.color
+              auxConv.status = 'offline'
+              auxConv.thought = item.thought
+              let messages = []
+              let newMessage 
+              messageUserAux.map((item)=>{
+                let fromMe = false
+                newMessage = true
+                if(item.sender === cod){
+                  fromMe = true
+                  newMessage = false
+                } 
+               let auxMsg = {
+                'message':item.text,
+                'fromMe': fromMe
+               }
+               messages.unshift(auxMsg)
+              })
+              auxConv.messages = messages
+              auxConv.newMessage = newMessage
+              conv.push(auxConv)
+            })
+            
+
+            console.log(conv)
+          })
+        })
+      })
+    })();
     // Verifica quais usuários estão online
     // Configura o Redux
     // Configura a const conversations e currentConv (ex. { id:0, ...conversations[0] })
