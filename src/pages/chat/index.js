@@ -49,7 +49,6 @@ export default function Main(){
 
         for(let user of userInfo){
 
-
           await api.get(`/conversations/${user.group_id}`)
           .then((res)=>{
 
@@ -144,8 +143,33 @@ export default function Main(){
         message:paramMessage, 
         time: today.getHours() + ":" + today.getMinutes() 
       });
-      //SALVAR NO BANCO
 
+      //SALVAR NO BANCO
+      let saveMessage = {
+        "id_user": cod,
+        "text": paramMessage
+      }
+
+       let data = {
+        "id_user_sender": parseInt(cod),
+        "id_user_receiver": parseInt(currentConv.cod),
+        "group_id": null,
+        "id_message": null
+      }
+      saveConversationBD(data,saveMessage)
+
+    }
+
+    async function saveConversationBD(data, saveMessage){
+      // recuperar o grupo do usuario
+      const group_id = await api.get(`/groupID/${cod}/${currentConv.cod}`)
+      const id = group_id.data.group[0].group_id
+      // salvar a mensagem do usuario e depois salva a conversa
+      await api.post('/createMessege',saveMessage).then(async (res)=>{
+        data.group_id = id
+        data.id_message = res.data.mensagem.id
+        await api.post("/createConversation",data)
+      })
     }
 
   }
