@@ -1,6 +1,7 @@
 import React, { useEffect, useState } from "react";
 import { Container, Line, Pack, ProfileIcon, RoundButton, Input, Message } from "../index.js";
 import { MessageLine, Messages } from "./styles.js";
+import { DefaultWarn } from "../styles.js";
 
 export default function Chat({ message, setMessage, sendMessage, messages, user }){
 
@@ -45,15 +46,14 @@ export default function Chat({ message, setMessage, sendMessage, messages, user 
         onChange={(e)=> setMessage(e.target.value)}
         />
 
-        <RoundButton/>
-        <RoundButton/>
+        <RoundButton style={{ color:"#ffffff" }}>Enviar</RoundButton>
 
       </Pack>
     </Line>
     </>
     :
-    <div style={{ display:"flex", width:"100%", height:"100%", alignItems:"center", justifyContent:"center", color:"#9AA4B5" }}>
-      Inicie uma conversa
+    <div style={{ display:"flex", width:"100%", height:"100%", alignItems:"center", justifyContent:"center" }}>
+      <DefaultWarn color={"#9AA4B5"}>Selecione uma conversa na lista de contatos</DefaultWarn>
     </div>
     }
 

@@ -21,7 +21,7 @@ async function start(data){
       var pusher = new Pusher('0fb0d6b89d9dcdaeb894', {
             cluster: 'sa1',
             channelAuthorization: {
-              endpoint: "http://127.0.0.1:3333/pusher/auth",
+              endpoint: "http://192.168.0.19:3333/pusher/auth",
               params: {
                 ...data
               },
@@ -123,7 +123,6 @@ function handleMessage(data){
 }
 
 function verifyIsOnline(userId){
-
   let member = channel.members.get(userId);
   return member?"online":"offline";
 }

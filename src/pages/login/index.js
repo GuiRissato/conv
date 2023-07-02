@@ -76,7 +76,8 @@ export default function Login(){
     }
 
     async function createUser(){
-        const { name, user_name, password, confirmPassword } = newUser;
+        const { name, user_name, password, confirmPassword , color, active } = newUser;
+        // console.log('newUser',name, user_name, password, confirmPassword , color, active)
 
         if(
         (name !== "" && user_name !== "" && password !== "") 
@@ -86,7 +87,16 @@ export default function Login(){
 
         delete newUser.confirmPassword
 
-         await api.post("/createUser", newUser)
+        const userCreation = {
+            'name': name,
+            "user_name": user_name,
+            "password": password,
+            "color": color,
+            "thought": "",
+            "active":active
+        }
+      
+         await api.post("/createUser", userCreation)
          .then((res)=> console.log(res.data) )
          .catch((err)=> console.log(err))
         }
@@ -125,7 +135,9 @@ export default function Login(){
 
             <Line style={{ marginBottom:"0.5rem" }}>
                 <Pack pos={3} style={{ justifyContent:"center" }}>
-                    <RoundButton type="submit" onClick={()=> handleCredentials() }/>
+                    <RoundButton style={{ color:"#ffffff" }} type="submit" onClick={()=> handleCredentials() }>
+                        Entrar
+                    </RoundButton>
                 </Pack>
             </Line>
             </form>     

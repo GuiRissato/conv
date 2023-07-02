@@ -19,18 +19,84 @@ import Cookies from "js-cookie";
 import { useSelector, useDispatch } from "react-redux";
 import { setCurrentConvID } from "../../interface/Redux/Modules/mainData";
 import { ContactsList, ItemContainer } from "./styles";
+import { DefaultWarn } from "../../Pattern/styles";
+import AddContact from "../../Pattern/Header/addContact";
+import { useModal } from "../../Pattern/Modal";
 
 export default function Main(){
 
   const { conversations: convFromRedux } = useSelector((state) => state.mainData);
   const dispatch = useDispatch();
+  const { addModal } = useModal();
 
   const [conversations, setConversations] = useState([]);
   const [currentConv, setCurrentConv] = useState(null);
   const [message, setMessage] = useState("");
+  
+  let cod = Cookies.get("conv-id");
 
-  useEffect(()=>{
+  useEffect(() => {
     //Busca no banco as conversas
+    (async function getConversations() {
+      await api.get(`groups/${cod}`)
+      .then(async (res)=>{
+
+        const userInfo = res.data.group;
+
+        for(let user in userInfo){
+
+          await api.get(`/conversations/${user.group_id}`).then((res)=>{
+
+            let messageUserAux = res.data
+            let conv = []
+            let auxConv = {
+               'cod':null,
+               'username':null,
+               'color':null,
+               'status':null,
+               'thought':null,
+               'messages':[{'message':null,'fromMe':null}],
+               'newMessage':null       
+             }
+
+              for(let item in userInfo){
+
+               auxConv.cod = item.id
+               auxConv.username = item.user_name
+               auxConv.color = item.color
+               auxConv.status = PUSHER.verifyIsOnline(item.id)
+               auxConv.thought = item.thought
+
+               let messages = []
+               let newMessage
+
+               messageUserAux.map((item)=>{
+
+                 let fromMe = false
+                 newMessage = true
+
+                 if(item.sender === cod){
+                   fromMe = true
+                   newMessage = false
+                 } 
+
+                let auxMsg = {
+                 'message':item.text,
+                 'fromMe': fromMe
+                }
+                
+                messages.unshift(auxMsg)
+               })
+               auxConv.messages = messages
+               auxConv.newMessage = newMessage
+               conv.push(auxConv)
+              }
+             
+             console.log(conv)
+           })
+        }
+      })
+    })();
     // Verifica quais usuários estão online
     // Configura o Redux
     // Configura a const conversations e currentConv (ex. { id:0, ...conversations[0] })
@@ -113,7 +179,10 @@ export default function Main(){
                 />
             ))
             :
-            <p style={{ color:"#526D82" }}>Adicione novos contatos</p>
+            <DefaultWarn color={"#526D82"}>
+              Adicione novos contatos!
+            </DefaultWarn>
+
             }
           </ContactsList>
         </ItemContainer>

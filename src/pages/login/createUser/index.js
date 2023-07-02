@@ -26,6 +26,7 @@ export default function CreateUser({ setNewUserAux }){
         console.log(newUser);
     },[newUser])
 
+
     return(
         <>
 

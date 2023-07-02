@@ -124,12 +124,12 @@ export const RoundButton = styled.button`
   background-color:${p=>p.color??"#9BA4B5"};
   border-radius: 2rem;
   width:100%;
-  // height: 25px;
+
   min-height:30px;
   border:solid;
   border-width:1px;
   border-color:${p=>p.color??"#9BA4B5"};
-  // aspect-ratio : 1/1;
+
   margin-left: 10px;
 
   justify-content: center;
@@ -138,33 +138,6 @@ export const RoundButton = styled.button`
 
   cursor:pointer;
 
-  // :hover{
-  //   animation: overButton .3s;
-  //   animation-fill-mode: both;
-  //   @keyframes overButton{
-  //     from { aspect-ratio : 1/1; }
-  //     to {
-  //       border-radius:20px;
-  //       aspect-ratio : 1/0.5;
-  //     }
-  //   }
-  // }
-
-  // :not(:hover){
-
-  //   animation: returnNormalButton .3s;
-  //   animation-fill-mode: both;
-  //   @keyframes returnNormalButton{
-  //     from {
-  //       border-radius:20px;
-  //       aspect-ratio : 1/0.5;
-  //     }
-  //     to {
-  //       border-radius:50%;
-  //       aspect-ratio : 1/1;
-  //     }
-  //   }
-  // }
 `
 
 export const MessageIndicator = styled.div`
@@ -238,19 +211,24 @@ font-size: 0.8rem;
 font-weight: 500;
 cursor:pointer;
 
-// @media screen and (max-width:700px){
-//     height: 10px;
-//     width:10px;
-//     border-radius:50%;
-//
-//     :focus{
-//         z-index: 2;
-//         width: 100%;
-//         border-radius: 20px;
-//         box-shadow: 1px 1px 10px #f2f2f2;
-//     }
-//
-// }
+${ p=> p.animation?
+  css`
+  animation: buttonAnimation 1.5s infinite;
+
+  @keyframes buttonAnimation{
+    0%{
+      transform: scale(1,1);
+    }
+    50%{
+      transform: scale(1.05,1.05);
+    }
+    100%{
+      transform: scale(1,1);
+    }
+  }
+  `:
+  ``
+}
 
 `
 
@@ -267,5 +245,18 @@ grid-template-rows: 2fr 1fr;
 grid-template-columns: 1fr;
 grid-row-gap: 1rem;
 
+`
+
+export const DefaultWarn = styled.div`
+
+color:${p=>p.color};
+cursor: default;
+
+-webkit-touch-callout: none;
+-webkit-user-select: none;
+-khtml-user-select: none;
+-moz-user-select: none;
+-ms-user-select: none;
+user-select: none; 
 
 `
