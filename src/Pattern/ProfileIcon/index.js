@@ -45,6 +45,8 @@ export default function ProfileIcon({ user, src, header = false }){
       </Thought>
     :
       <Input 
+      type="text"
+      spellcheck="false" 
       defaultValue={thought} 
       placeholder={" novo status..."} 
       onBlur={(e)=> saveThought(e.target.value)}

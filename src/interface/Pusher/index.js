@@ -8,7 +8,8 @@ let channel = null;
 
 const PUSHER = {
  start: async (data)=> await start(data),
- post: (data)=> post(data)
+ post: (data)=> post(data),
+ verifyIsOnline: (cod)=> verifyIsOnline(cod)
 }
 
 async function start(data){
@@ -83,8 +84,6 @@ function handleAddedMember(member){
 
 function handleRemovedMember(member){
 
-  console.log(member)
-
   const { conversations } = store.getState().mainData;
 
   let aux = [...conversations];
@@ -116,11 +115,17 @@ function handleMessage(data){
 
     }
   })
-  console.log(aux);
+
   const [element] = aux.splice(conversationID, 1);
   aux.unshift(element);
   
   store.dispatch(setConversations(aux));
+}
+
+function verifyIsOnline(userId){
+
+  let member = channel.members.get(userId);
+  return member?"online":"offline";
 }
 
 export default PUSHER;
