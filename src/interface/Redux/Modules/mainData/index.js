@@ -8,7 +8,7 @@ export function setUser(data) {
 }
 
 export function setConversations(data) {
-    console.log("Redux",data)
+
     return {
         type: '@mainData/SET_CONVERSATIONS',
         payload: data,

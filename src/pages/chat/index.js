@@ -116,9 +116,9 @@ export default function Main(){
     }
   },[convFromRedux])
 
-  useEffect(()=>{
-    console.log(convFromRedux)
-  },[convFromRedux])
+  // useEffect(()=>{
+  //   console.log(convFromRedux)
+  // },[convFromRedux])
 
   function sendMessage(paramMessage = message){
 

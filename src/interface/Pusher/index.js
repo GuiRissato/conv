@@ -4,7 +4,7 @@ import Cookies from "js-cookie";
 import { store } from "../Redux";
 import { setConversations } from "../Redux/Modules/mainData";
 
-let channel = null;
+var channel;
 
 const PUSHER = {
  start: async (data)=> await start(data),
@@ -32,12 +32,18 @@ async function start(data){
       channel = pusher.subscribe('presence-messages-channel');
 
       channel.bind("pusher:member_added", (member)=>{
-        handleAddedMember(member)
+        handleAddedMember(member);
       })
 
       channel.bind("pusher:member_removed", (member) => {
-        handleRemovedMember(member)
+        handleRemovedMember(member);
       });
+
+      // channel.bind("pusher:subscription_succeeded", function () {
+      //   var me = presenceChannel.members.me;
+      //   var userId = me.id;
+      //   var userInfo = me.info;
+      // });
 
       channel.bind("client-send-message", (data) => {
 
@@ -68,15 +74,13 @@ try{
 
 function handleAddedMember(member){
 
-  console.log(member)
-
   const { conversations } = store.getState().mainData;
 
   let aux = [...conversations];
-
+  console.log(member)
   aux.map((conversation)=>{
     if(parseInt(member.id) === parseInt(conversation.cod)){
-
+    
       conversation.status = "online";
     }
   })
@@ -125,10 +129,10 @@ function handleMessage(data){
 }
 
 function verifyIsOnline(userId){
-  let member = channel.members.get(userId);
+  var user = channel.members.get(`${userId}`);
+  // const { members } = channel;
   console.log(channel)
-  console.log(channel.members.members)
-  return member?"online":"offline";
+  return user?"online":"offline";
 }
 
 export default PUSHER;

@@ -46,7 +46,7 @@ export default function Chat({ message, setMessage, sendMessage, messages, user 
         onChange={(e)=> setMessage(e.target.value)}
         />
 
-        <RoundButton style={{ color:"#ffffff" }}>Enviar</RoundButton>
+        <RoundButton style={{ color:"#ffffff", maxWidth: 70 }}>Enviar</RoundButton>
 
       </Pack>
     </Line>

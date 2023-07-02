@@ -8,7 +8,7 @@ export default function MiniConv({ userData, sendMessage, selectConv, isTheCurre
   const lastMessage = messages[0];
 
   return(
-    <Container style={{ padding:10, height:"22vh", width:"25vh",  padding:7, backgroundColor:"#ffffff95", borderRadius: 11 }}>
+    <Container style={{ padding:10, height:"22vh", width:"25vh",  padding:7, backgroundColor:"#ffffff95", borderRadius: 11, margin:5 }}>
 
       {!isTheCurrent?
         <>
