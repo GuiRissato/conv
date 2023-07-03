@@ -4,12 +4,11 @@ import Cookies from "js-cookie";
 import { store } from "../Redux";
 import { setConversations } from "../Redux/Modules/mainData";
 
-var channel;
+var channel = null;
 
 const PUSHER = {
  start: async (data)=> await start(data),
- post: (data)=> post(data),
- verifyIsOnline: (cod)=> verifyIsOnline(cod)
+ post: (data)=> post(data)
 }
 
 async function start(data){
@@ -22,7 +21,7 @@ async function start(data){
       var pusher = new Pusher('0fb0d6b89d9dcdaeb894', {
             cluster: 'sa1',
             channelAuthorization: {
-              endpoint: "http://192.168.0.19:3333/pusher/auth",
+              endpoint: "http://127.0.0.1:3333/pusher/auth",
               params: {
                 ...data
               },
@@ -31,27 +30,49 @@ async function start(data){
 
       channel = pusher.subscribe('presence-messages-channel');
 
-      channel.bind("pusher:member_added", (member)=>{
-        handleAddedMember(member);
-      })
 
-      channel.bind("pusher:member_removed", (member) => {
-        handleRemovedMember(member);
+      channel.bind("pusher:subscription_succeeded", function () {
+
+        console.log("Online on Pusher");
+
+        const { conversations } = store.getState().mainData;
+
+        let aux = [...conversations];
+
+        aux.map((c)=>{
+          let isOnline = channel.members.get(c.cod);
+          console.log(isOnline)
+          c.status = isOnline?"online":"offline";
+        })
+        console.log(aux)
+        store.dispatch(setConversations(aux))
+
+        channel.bind("pusher:member_added", (member)=>{
+          if(member){
+            handleAddedMember(member);
+          }
+        })
+  
+        channel.bind("pusher:member_removed", (member) => {
+          if(member){
+            handleRemovedMember(member);
+          }
+        });
+
+        channel.bind("client-send-message", (data) => {
+          
+          if(data.to.cod){
+            console.log(data.to.cod);
+    
+            if(parseInt(data.to.cod) === parseInt(Cookies.get("conv-id"))){
+              handleMessage(data);
+            }
+          }
+
+        });
+
       });
 
-      // channel.bind("pusher:subscription_succeeded", function () {
-      //   var me = presenceChannel.members.me;
-      //   var userId = me.id;
-      //   var userInfo = me.info;
-      // });
-
-      channel.bind("client-send-message", (data) => {
-
-        if(parseInt(data.to.cod) === parseInt(Cookies.get("conv-id"))){
-          console.log(data)
-          handleMessage(data);
-        }
-      });
     }
 
     return "success";
@@ -72,19 +93,18 @@ try{
 
 }
 
-function handleAddedMember(member){
+function handleAddedMember({ id }){
 
   const { conversations } = store.getState().mainData;
 
   let aux = [...conversations];
-  console.log(member)
-  aux.map((conversation)=>{
-    if(parseInt(member.id) === parseInt(conversation.cod)){
+
+  aux.map((conv)=>{
+    if(parseInt(id) === parseInt(conv.cod)){
     
-      conversation.status = "online";
+      conv.status = "online";
     }
   })
-
   store.dispatch(setConversations(aux));
 }
 
@@ -110,13 +130,14 @@ function handleMessage(data){
   let aux = [...conversations];
   let conversationID = null;
 
-  aux.map((conversation, id)=>{
-    if(parseInt(data.from.cod) === parseInt(conversation.cod)){
+  aux.map((conv, id)=>{
+    if(parseInt(data.from.cod) === parseInt(conv.cod)){
       conversationID = id;
-      conversation.messages.unshift({ message:data.message, fromMe:false });
+      conv.messages.unshift({ message:data.message, fromMe:false });
 
-      if(parseInt(currentConvID) !== parseInt(conversation.cod)){
-        conversation.newMessages += 1;
+      if(parseInt(currentConvID) != parseInt(conv.cod)){
+        console.log(currentConvID)
+        conv.newMessage += 1;
       }
 
     }
@@ -126,13 +147,6 @@ function handleMessage(data){
   aux.unshift(element);
   
   store.dispatch(setConversations(aux));
-}
-
-function verifyIsOnline(userId){
-  var user = channel.members.get(`${userId}`);
-  // const { members } = channel;
-  console.log(channel)
-  return user?"online":"offline";
 }
 
 export default PUSHER;

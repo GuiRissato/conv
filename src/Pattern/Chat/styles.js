@@ -9,6 +9,14 @@ width:100%;
 overflow-y:auto;
 padding:10px;
 
+-ms-overflow-style: none;  /* Internet Explorer 10+ */
+scrollbar-width: none;  /* Firefox */
+::-webkit-scrollbar {
+    width: 0px;
+    background: transparent; /* make scrollbar transparent */
+}
+
+
 `
 
 export const MessageLine = styled.div`

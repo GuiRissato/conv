@@ -20,4 +20,9 @@ display:flex;
 
  -ms-overflow-style: none;  /* Internet Explorer 10+ */
 scrollbar-width: none;  /* Firefox */
+::-webkit-scrollbar {
+    width: 0px;
+    background: transparent; /* make scrollbar transparent */
+}
+
 `

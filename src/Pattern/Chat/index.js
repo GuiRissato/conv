@@ -8,7 +8,7 @@ export default function Chat({ message, setMessage, sendMessage, messages, user 
 
   return(
 
-    <Container style={{ justifyContent:"bottom", height:"100%", width:"70vh", backgroundColor:"white", borderRadius:"21px", border:"solid", borderColor:"#F2F2F2", borderWidth:2 }}>
+    <Container style={{ justifyContent:"bottom", height:"100%", width:"70vh", maxHeight:"55vh", backgroundColor:"white", borderRadius:"21px", border:"solid", borderColor:"#F2F2F2", borderWidth:2 }}>
     
     {user?
     <>
@@ -16,6 +16,7 @@ export default function Chat({ message, setMessage, sendMessage, messages, user 
 
       <Pack fill={5} style={{ justifyContent:"space-between" }}>
         <ProfileIcon 
+        miniConv={true}
         user={user}
         src={""}
         />
@@ -34,7 +35,7 @@ export default function Chat({ message, setMessage, sendMessage, messages, user 
 
 
     <Line style={{ padding:10, backgroundColor:"#ffffff80" }}>
-      <Pack pos={1} fill={5}>
+      <Pack pos={1} fill={5} style={{ width:"100%" }}>
 
         <Input
         placeholder={" Digite..."}

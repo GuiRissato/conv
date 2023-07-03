@@ -7,7 +7,7 @@ display:flex;
  width:100%;
  justify-content: center;
  align-items: center;
- background-color:#F1F6F9;
+//  background-color:#F1F6F9;
  padding:10px;
  border-radius:2rem;
 
@@ -17,7 +17,7 @@ export const Status = styled.div`
   display: flex;
 
   aspect-ratio : 1 / 1;
-  height:8vh;
+  height:6vh;
 
   justify-content:center;
   align-items:center;

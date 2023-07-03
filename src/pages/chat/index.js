@@ -33,7 +33,7 @@ export default function Main(){
   const [convs, setConvs] = useState([]);
   const [currentConv, setCurrentConv] = useState(null);
   const [message, setMessage] = useState("");
-  
+
   let cod = Cookies.get("conv-id");
 
   useEffect(() => {
@@ -50,10 +50,10 @@ export default function Main(){
         for(let user of userInfo){
 
           await api.get(`/conversations/${user.group_id}`)
-          .then((res)=>{
+          .then(async(res)=>{
 
             let messageUserAux = res.data
-            
+
             let auxConv = {
                'cod':null,
                'username':null,
@@ -62,34 +62,34 @@ export default function Main(){
                'status':null,
                'thought':null,
                'messages':[], // {'message':string,'fromMe':bool}
-               'newMessage':null
+               'newMessage':0
              }
 
                auxConv.cod = user.id
                auxConv.name = user.name
                auxConv.username = user.user_name
                auxConv.color = user.color
-               auxConv.status = PUSHER.verifyIsOnline(user.id)
+               auxConv.status = "offline"
                auxConv.thought = user.thought
 
                let messages = []
-               let newMessage
+               let newMessage = 0
 
                messageUserAux.map((item)=>{
 
                  let fromMe = false
-                 newMessage = true
+                 newMessage = 0
 
-                 if(item.sender === cod){
+                 if(item.sender == cod){
                    fromMe = true
-                   newMessage = false
-                 } 
+                   newMessage = 0
+                 }
 
                 let auxMsg = {
                  'message':item.text,
                  'fromMe': fromMe
                 }
-                
+
                 messages.unshift(auxMsg)
                })
                auxConv.messages = messages
@@ -98,28 +98,38 @@ export default function Main(){
            })
         }
       })
-
-    console.log(conv);
-    dispatch(setConversations(conv));
+    if(conv.length > 0){
+      setCurrentConv({id:0, ...conv[0] })
+    }
     setConvs(conv);
+    dispatch(setConversations(conv));
 
     })();
-    // Configura o Redux
-    // Configura a const conversations e currentConv (ex. { id:0, ...conversations[0] })
+
   },[newContactAdded])
 
   useEffect(()=>{
-    //Resgatar conversas 
+    //Resgatar conversas
     if(convFromRedux.lenght !== 0){
+
       setConvs(convFromRedux);
+
+      if(convs.length > 0){
+      convFromRedux.map((c,id)=>{
+
+        if(c.cod === currentConv.cod){
+          setCurrentConv({id, ...c})
+        }
+
+      })
+      }
+    
     }
-  },[convFromRedux])
 
-  // useEffect(()=>{
-  //   console.log(convFromRedux)
-  // },[convFromRedux])
+  },[convFromRedux, convs])
 
-  function sendMessage(paramMessage = message){
+
+  async function sendMessage(paramMessage = message){
 
     if(currentConv){
 
@@ -137,11 +147,11 @@ export default function Main(){
       let cod = Cookies.get("conv-id");
 
       let today = new Date()
-      PUSHER.post({ 
+      PUSHER.post({
         from:{ cod, username },
-        to: { cod:currentConv.cod, username: currentConv.username }, 
-        message:paramMessage, 
-        time: today.getHours() + ":" + today.getMinutes() 
+        to: { cod:currentConv.cod, username: currentConv.username },
+        message:paramMessage,
+        time: today.getHours() + ":" + today.getMinutes()
       });
 
       //SALVAR NO BANCO
@@ -156,7 +166,7 @@ export default function Main(){
         "group_id": null,
         "id_message": null
       }
-      saveConversationBD(data,saveMessage)
+      await saveConversationBD(data,saveMessage)
 
     }
 
@@ -174,17 +184,57 @@ export default function Main(){
 
   }
 
-  function sendMessageFromMiniConv(message, id){
+  async function sendMessageFromMiniConv(message, id){
 
     let conversationsAux = convs.map((a)=>({...a}));
 
     conversationsAux[id].messages.unshift({ message, fromMe:true });
     setConvs(conversationsAux);
-  }
 
-  function handleCurrentConv(conv,id){ 
+    let username = Cookies.get("conv-username");
+      let cod = Cookies.get("conv-id");
 
-    setCurrentConv({ id, ...conv });
+      let today = new Date()
+      PUSHER.post({
+        from:{ cod, username },
+        to: { 
+          cod:conversationsAux[id].cod, 
+          username: conversationsAux[id].username },
+        message:message,
+        time: today.getHours() + ":" + today.getMinutes()
+      });
+
+      //SALVAR NO BANCO
+      let saveMessage = {
+        "id_user": cod,
+        "text": message
+      }
+
+       let data = {
+        "id_user_sender": parseInt(cod),
+        "id_user_receiver": parseInt(conversationsAux[id].cod),
+        "group_id": null,
+        "id_message": null
+      }
+
+      // recuperar o grupo do usuario
+      const group_id = await api.get(`/groupID/${cod}/${conversationsAux[id].cod}`)
+      const idOfGroup = group_id.data.group[0].group_id
+      // salvar a mensagem do usuario e depois salva a conversa
+      await api.post('/createMessege',saveMessage).then(async (res)=>{
+        data.group_id = idOfGroup
+        data.id_message = res.data.mensagem.id
+        await api.post("/createConversation",data)
+      })
+    }
+
+  function handleCurrentConv(conv,id){
+
+    let aux = [...convs];
+    aux[currentConv.id].newMessage = 0; 
+
+    setCurrentConv({ id, newMessage:0, ...conv });
+    setConvs(aux);
     dispatch(setCurrentConvID(conv.cod));
 
   }
@@ -192,13 +242,13 @@ export default function Main(){
 
   return(
       <Grid>
-      
+
       <ItemContainer>
-        <Chat 
-         messages={currentConv?.messages} 
-         message={message} 
-         setMessage={setMessage} 
-         sendMessage={sendMessage} 
+        <Chat
+         messages={currentConv?.messages}
+         message={message}
+         setMessage={setMessage}
+         sendMessage={sendMessage}
          user={currentConv??null}
          />
         </ItemContainer>
