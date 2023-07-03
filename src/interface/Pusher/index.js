@@ -3,12 +3,14 @@ import Cookies from "js-cookie";
 
 import { store } from "../Redux";
 import { setConversations } from "../Redux/Modules/mainData";
+import api from "../API";
 
 var channel = null;
 
 const PUSHER = {
  start: async (data)=> await start(data),
- post: (data)=> post(data)
+ post: (data)=> post(data),
+ verifyIsOnline: (cod)=> verifyIsOnline(cod)
 }
 
 async function start(data){
@@ -21,7 +23,7 @@ async function start(data){
       var pusher = new Pusher('0fb0d6b89d9dcdaeb894', {
             cluster: 'sa1',
             channelAuthorization: {
-              endpoint: "http://127.0.0.1:3333/pusher/auth",
+              endpoint: "http://18.229.160.116:3000/pusher/auth",
               params: {
                 ...data
               },
@@ -131,6 +133,7 @@ function handleMessage(data){
   let conversationID = null;
 
   aux.map((conv, id)=>{
+
     if(parseInt(data.from.cod) === parseInt(conv.cod)){
       conversationID = id;
       conv.messages.unshift({ message:data.message, fromMe:false });
@@ -142,11 +145,26 @@ function handleMessage(data){
 
     }
   })
-
-  const [element] = aux.splice(conversationID, 1);
-  aux.unshift(element);
+  
+  if(conversationID === null){
+    
+    aux.push({
+        ...data.from,
+        'messages':[{ message:data.message, fromMe:false }], // {'message':string,'fromMe':bool}
+        'newMessage':1
+    })
+  }else{
+    // const [element] = aux.splice(conversationID, 1);
+    // aux = aux.slice((conversationID, 1));
+    // aux.unshift(element);
+  }
   
   store.dispatch(setConversations(aux));
+}
+
+function verifyIsOnline(userId){
+  let user = channel.members.get(userId);
+  return user?"online":"offline";
 }
 
 export default PUSHER;

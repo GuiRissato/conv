@@ -20,7 +20,7 @@ export default function MiniConv({ userData, sendMessage, selectConv, isTheCurre
       </Line>
 
       <Line  onClick={()=> selectConv()} style={{ display: "flex", flexDirection:`${lastMessage?.fromMe?"row-reverse":"row"}`, alignItems:"center", height:"calc(80% - 20%)"}}>
-          {lastMessage?<Message style={{ maxWidth:"100%", }} fromMe={lastMessage.fromMe} theLast>{lastMessage.message.replace(/(.{55})..+/, "$1…")}</Message>:<></>}
+          {lastMessage?<Message style={{ maxWidth:"100%", }} fromMe={lastMessage.fromMe} theLast>{lastMessage.message.replace(/(.{20})..+/, "$1…")}</Message>:<></>}
       </Line>
 
       <Line style={{ position:"absolute", bottom:7, justifyContent:"center", alignItems:"center"}}>

@@ -14,14 +14,13 @@ function PageRoutes(){
   return(
     <Router basename='/'>
      <Routes>
-  
+    
+     <Route path="*" element={<Login/>}/>  
      <Route path="/login" element={<Login/>}/>
 
         <Route element ={<Private/>}>
           <Route path="chat" element={<Main/>}/>
         </Route>
-
-      <Route path="*" element={<Login/>}/>  
 
      </Routes>
     </Router>

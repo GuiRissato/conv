@@ -22,10 +22,6 @@ export default function CreateUser({ setNewUserAux }){
       setNewUserAux(aux);
     }
 
-    useEffect(()=>{
-        console.log(newUser);
-    },[newUser])
-
 
     return(
         <>

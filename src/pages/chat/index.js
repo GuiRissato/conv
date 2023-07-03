@@ -25,7 +25,7 @@ import { useModal } from "../../Pattern/Modal";
 
 export default function Main(){
 
-  const { conversations: convFromRedux, newContactAdded } = useSelector((state) => state.mainData);
+  const { conversations: convFromRedux, newContactAdded, user } = useSelector((state) => state.mainData);
 
   const dispatch = useDispatch();
   const { addModal } = useModal();
@@ -48,10 +48,10 @@ export default function Main(){
         const userInfo = res.data.group;
 
         for(let user of userInfo){
-
+          console.log(user)
           await api.get(`/conversations/${user.group_id}`)
           .then(async(res)=>{
-
+            console.log(res.data)
             let messageUserAux = res.data
 
             let auxConv = {
@@ -115,13 +115,21 @@ export default function Main(){
       setConvs(convFromRedux);
 
       if(convs.length > 0){
-      convFromRedux.map((c,id)=>{
+      
+      if(!currentConv){
+        setCurrentConv({id:0, ...convFromRedux[0]})
+        dispatch(setCurrentConvID(convFromRedux[0].cod))
+      }else{
+        convFromRedux.map((c,id)=>{
 
-        if(c.cod === currentConv.cod){
-          setCurrentConv({id, ...c})
-        }
-
-      })
+          if(c.cod === currentConv.cod){
+            setCurrentConv({id, ...c})
+            dispatch(setCurrentConvID(c.cod))
+          }
+  
+        })
+      }
+        
       }
     
     }
@@ -147,13 +155,14 @@ export default function Main(){
       let cod = Cookies.get("conv-id");
 
       let today = new Date()
+
       PUSHER.post({
-        from:{ cod, username },
+        from:{...user, status:"online" },
         to: { cod:currentConv.cod, username: currentConv.username },
         message:paramMessage,
         time: today.getHours() + ":" + today.getMinutes()
       });
-
+      console.log(currentConv)
       //SALVAR NO BANCO
       let saveMessage = {
         "id_user": cod,

@@ -5,6 +5,7 @@ import api from "../../interface/API";
 import Cookies from "js-cookie";
 import { useDispatch } from "react-redux";
 import { setNewUserAdded } from "../../interface/Redux/Modules/mainData";
+import PUSHER from "../../interface/Pusher";
 
 export default function AddContact({ closeModal }){
 
@@ -22,7 +23,14 @@ export default function AddContact({ closeModal }){
 
                 const { id, name, user_name, thought, color } = res.data[0];
 
-                setUser({ cod:id, name, username:user_name, thought, color });
+                setUser({ 
+                    cod:id, 
+                    name, 
+                    username:user_name, 
+                    thought, 
+                    color,
+                    status: PUSHER.verifyIsOnline(id) 
+                });
             })
             .catch((err)=> console.log(err) )
         }
@@ -51,7 +59,7 @@ export default function AddContact({ closeModal }){
 
             {user?
             <div style={{ display:"flex", flexDirection:"column", width:"100%", height:"100%", justifyContent:"center", alignItems:"center", marginBottom:30 }}>
-                <GreatProfileIcon color={user.color} cod={user.cod} name={user.name} username={user.username} thought={user.thought} />
+                <GreatProfileIcon stt={user.status} color={user.color} cod={user.cod} name={user.name} username={user.username} thought={user.thought} />
                 {user.cod != Cookies.get("conv-id")?<RoundButton style={{ color:"white", marginTop:15 }} color={"#609966"} onClick={handleClickAdd}>+ Adicionar</RoundButton>:<></>}
             </div>
             :

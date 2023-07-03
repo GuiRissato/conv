@@ -16,31 +16,9 @@ export default function Login(){
     const navigate = useNavigate();
     const dispatch = useDispatch();
 
-    const { addModal, closeModal } = useModal();
+    const { addModal, closeModal, modalInfo } = useModal();
     const [userData, setUserData] = useState({ username:"", password:"" });
     const [newUser, setNewUser] = useState({});
-
-
-    // useEffect(()=>{
-
-    //     (async ()=>{
-    //         const cod =Cookies.get('conv-id');
-
-    //         if(cod){
-            
-    //         await api.get(`/userInfo/${parseInt(cod)}`)
-    //         .then((res)=>{
-
-    //             dispatch(setUser(res.data));
-    //             PUSHER.start({ cod, name:res.data.name, username:res.data.user_name })
-
-    //             navigate("/chat");
-    //         })
-    //         }
-    //     }
-    //     )()
-
-    // },[])
 
 
     async function handleCredentials(){
@@ -75,17 +53,21 @@ export default function Login(){
 
     }
 
+    useEffect(()=>{
+    if(modalInfo.visible == false){
+        createUser();
+        }
+    },[modalInfo])
+
     async function createUser(){
         const { name, user_name, password, confirmPassword , color, active } = newUser;
         // console.log('newUser',name, user_name, password, confirmPassword , color, active)
-
+        console.log("CRIANDO", newUser);
         if(
         (name !== "" && user_name !== "" && password !== "") 
         && 
         (password === confirmPassword)
         ){
-
-        delete newUser.confirmPassword
 
         const userCreation = {
             'name': name,
@@ -95,7 +77,7 @@ export default function Login(){
             "thought": "",
             "active":active
         }
-      
+        console.log(userCreation);
          await api.post("/createUser", userCreation)
          .then((res)=> console.log(res.data) )
          .catch((err)=> console.log(err))
@@ -150,7 +132,7 @@ export default function Login(){
             }}
             onClick={()=> addModal({
                 body:<CreateUser setNewUserAux={setNewUser} />,
-                buttonPrimary: { label: "e pronto!", function: ()=> createUser() }
+                buttonPrimary: { label: "e pronto!", function:createUser }
             })}>
                 <Pack pos={3} style={{ justifyContent:"center" }}>
                 <div style={{ textAlign:"center" }}>
